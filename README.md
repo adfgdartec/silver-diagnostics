@@ -1,0 +1,263 @@
+# silver-diagnostics
+
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](tests/)
+[![Code Style](https://img.shields.io/badge/code%20style-flake8-blue.svg)](https://flake8.pycqa.org/)
+
+Framework-neutral ML data and training diagnostics for Silver. A Python package designed for ML researchers who need robust data validation and training stability checks across different frameworks.
+
+## Installation
+
+```bash
+pip install silver-diagnostics
+```
+
+## Quick Start
+
+```python
+from silver_diagnostics import diagnose_dataset, diagnose_metrics
+
+# Diagnose dataset issues
+features = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
+labels = [0.0, 1.0, 0.0]
+
+report = diagnose_dataset(features, labels)
+if not report.valid:
+    print("Dataset issues found:")
+    for diagnostic in report.diagnostics:
+        print(f"  [{diagnostic.severity}] {diagnostic.message}")
+
+# Diagnose metrics issues
+metrics = {"loss": 0.5, "accuracy": 0.9, "gradient_norm": 1e6}
+report = diagnose_metrics(metrics)
+for diagnostic in report.diagnostics:
+    print(f"[{diagnostic.severity}] {diagnostic.message}")
+```
+
+## Features
+
+- **Dataset Validation**: Comprehensive checks for empty data, length mismatches, and structural issues
+- **Non-Finite Detection**: Automatic detection of NaN and infinity values in features and labels
+- **Metrics Diagnostics**: Training metrics validation for numerical stability
+- **Exploding Gradient Detection**: Specialized checks for gradient explosion during training
+- **Framework-Agnostic**: Works with PyTorch, TensorFlow, JAX, or any numeric data
+- **Detailed Reporting**: Structured diagnostic information with severity levels and context
+- **Type Safety**: Full type hints for better IDE support and fewer bugs
+
+## Use Cases
+
+### Training Pipeline Validation
+
+```python
+from silver_diagnostics import diagnose_dataset, diagnose_metrics
+import torch
+
+# Validate training data before training
+train_features = torch.randn(1000, 10).numpy()
+train_labels = torch.randint(0, 2, (1000,)).numpy()
+
+report = diagnose_dataset(train_features.tolist(), train_labels.tolist())
+if not report.valid:
+    print("Cannot train with invalid dataset:")
+    for diagnostic in report.diagnostics:
+        print(f"  {diagnostic.code}: {diagnostic.message}")
+else:
+    print("Dataset is valid for training")
+```
+
+### Training Stability Monitoring
+
+```python
+from silver_diagnostics import diagnose_metrics
+
+# Monitor training metrics for stability
+def check_training_stability(metrics):
+    report = diagnose_metrics(metrics)
+    
+    # Check for errors
+    errors = [d for d in report.diagnostics if d.severity == "error"]
+    if errors:
+        print("Training stability issues:")
+        for error in errors:
+            print(f"  {error.code}: {error.message}")
+            return False
+    
+    # Check for warnings
+    warnings = [d for d in report.diagnostics if d.severity == "warning"]
+    if warnings:
+        print("Training stability warnings:")
+        for warning in warnings:
+            print(f"  {warning.code}: {warning.message}")
+    
+    return True
+
+# During training loop
+for epoch in range(10):
+    loss = train_epoch()
+    metrics = {
+        "loss": loss,
+        "gradient_norm": compute_gradient_norm(),
+        "accuracy": evaluate()
+    }
+    
+    if not check_training_stability(metrics):
+        print("Training unstable - stopping")
+        break
+```
+
+### Data Quality Assurance
+
+```python
+from silver_diagnostics import diagnose_dataset
+
+def validate_ml_pipeline_data(X_train, y_train, X_val, y_val):
+    """Validate all datasets in ML pipeline"""
+    datasets = {
+        "training": (X_train, y_train),
+        "validation": (X_val, y_val)
+    }
+    
+    all_valid = True
+    for name, (features, labels) in datasets.items():
+        report = diagnose_dataset(features.tolist(), labels.tolist())
+        
+        print(f"\n{name} dataset:")
+        if report.valid:
+            print(f"  ✓ Valid ({len(features)} samples)")
+        else:
+            print(f"  ✗ Invalid")
+            for diagnostic in report.diagnostics:
+                print(f"    {diagnostic.message}")
+            all_valid = False
+    
+    return all_valid
+```
+
+### Framework Integration
+
+```python
+from silver_diagnostics import diagnose_dataset, diagnose_metrics
+import tensorflow as tf
+import torch
+
+# Works with TensorFlow tensors
+tf_features = tf.random.normal((100, 10))
+tf_labels = tf.random.uniform((100,), maxval=2, dtype=tf.int32)
+
+report = diagnose_dataset(
+    tf_features.numpy().tolist(),
+    tf_labels.numpy().tolist()
+)
+
+# Works with PyTorch tensors
+torch_features = torch.randn(100, 10)
+torch_labels = torch.randint(0, 2, (100,))
+
+report = diagnose_dataset(
+    torch_features.tolist(),
+    torch_labels.tolist()
+)
+```
+
+## Advanced Usage
+
+### Custom Diagnostic Processing
+
+```python
+from silver_diagnostics import diagnose_dataset, Diagnostic
+
+def categorize_diagnostics(report):
+    """Categorize diagnostics by type"""
+    categories = {
+        "structural": [],
+        "data_quality": [],
+        "numerical": []
+    }
+    
+    for diagnostic in report.diagnostics:
+        if diagnostic.code in ["empty_dataset", "length_mismatch", "feature_width_mismatch"]:
+            categories["structural"].append(diagnostic)
+        elif diagnostic.code in ["non_finite_feature", "non_finite_label"]:
+            categories["numerical"].append(diagnostic)
+        else:
+            categories["data_quality"].append(diagnostic)
+    
+    return categories
+
+report = diagnose_dataset(features, labels)
+categories = categorize_diagnostics(report)
+
+for category, diagnostics in categories.items():
+    if diagnostics:
+        print(f"{category.upper()} ({len(diagnostics)}):")
+        for diag in diagnostics:
+            print(f"  - {diag.message}")
+```
+
+### Batch Validation
+
+```python
+from silver_diagnostics import diagnose_dataset
+
+def validate_multiple_datasets(dataset_dict):
+    """Validate multiple datasets at once"""
+    results = {}
+    
+    for name, (features, labels) in dataset_dict.items():
+        report = diagnose_dataset(features, labels)
+        results[name] = {
+            "valid": report.valid,
+            "error_count": sum(1 for d in report.diagnostics if d.severity == "error"),
+            "warning_count": sum(1 for d in report.diagnostics if d.severity == "warning"),
+            "diagnostics": report.diagnostics
+        }
+    
+    return results
+
+datasets = {
+    "train": (X_train.tolist(), y_train.tolist()),
+    "val": (X_val.tolist(), y_val.tolist()),
+    "test": (X_test.tolist(), y_test.tolist())
+}
+
+validation_results = validate_multiple_datasets(datasets)
+for name, result in validation_results.items():
+    status = "✓" if result["valid"] else "✗"
+    print(f"{status} {name}: {result['error_count']} errors, {result['warning_count']} warnings")
+```
+
+## Requirements
+
+- Python 3.8+
+
+## Development
+
+```bash
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run tests with coverage
+pytest --cov=silver_diagnostics --cov-report=html
+
+# Run linting
+flake8 src/ tests/
+mypy src/
+```
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+Apache-2.0 - see [LICENSE](LICENSE) file for details.
+
+## Related Packages
+
+- [silver-data](https://github.com/adfgdartec/silver-data) - Dataset handling
+- [silver-run](https://github.com/adfgdartec/silver-run) - Training lifecycle
+- [silver-adapters](https://github.com/adfgdartec/silver-adapters) - Framework adapters
