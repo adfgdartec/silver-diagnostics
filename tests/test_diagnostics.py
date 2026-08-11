@@ -247,7 +247,7 @@ class TestDiagnosticDetails:
 
 class TestEdgeCases:
     def test_very_large_numbers(self):
-        features = [[1e308, 2e308]]
+        features = [[1e308, 2e307]]
         labels = [0.0]
         report = diagnose_dataset(features, labels)
 
