@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Added report `errors`, `warnings`, `summary()`, `to_dict()`, and `raise_if_invalid()` helpers.
 - Added required-metric thresholds and metric-history regression diagnostics.
+- Added advanced confusion-matrix analysis with normalized matrices, per-class
+  metrics, top confusions, and hierarchical parent-group errors.
 
 ## [0.1.0] - 2024-08-04
 

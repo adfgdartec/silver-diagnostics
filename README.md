@@ -35,6 +35,23 @@ for diagnostic in report.diagnostics:
     print(f"[{diagnostic.severity}] {diagnostic.message}")
 ```
 
+### Deep classification analysis
+
+```python
+from silver_diagnostics import analyze_confusion_matrix
+
+report = analyze_confusion_matrix(
+    [[92, 6, 2], [8, 84, 8], [1, 9, 90]],
+    labels=["healthy", "warning", "failure"],
+    hierarchy={"healthy": "state", "warning": "state", "failure": "state"},
+)
+print(report.macro_f1, report.top_confusions)
+```
+
+Reports include per-class precision, recall, F1, specificity, support,
+normalized matrices, top error pairs, and optional parent-group confusion.
+Use `analyze_hierarchical_confusion()` for coarse-to-fine levels.
+
 ## Features
 
 - **Dataset Validation**: Comprehensive checks for empty data, length mismatches, and structural issues
