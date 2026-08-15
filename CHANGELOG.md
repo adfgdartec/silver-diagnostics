@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Added report `errors`, `warnings`, `summary()`, `to_dict()`, and `raise_if_invalid()` helpers.
+- Added required-metric thresholds and metric-history regression diagnostics.
 
 ## [0.1.0] - 2024-08-04
 

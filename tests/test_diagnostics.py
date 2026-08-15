@@ -5,6 +5,7 @@ from silver_diagnostics import (
     DiagnosticReport,
     diagnose_dataset,
     diagnose_metrics,
+    diagnose_metric_history,
 )
 
 
@@ -122,6 +123,12 @@ class TestDiagnoseDataset:
 
 
 class TestDiagnoseMetrics:
+    def test_metric_history_required_and_regression(self):
+        report = diagnose_metric_history([{"loss": 1.0}, {"loss": 1.3}, {"loss": 1.5}], required=["accuracy"])
+        assert not report.valid
+        assert any(item.code == "missing_metric" for item in report.diagnostics)
+        assert any(item.code == "loss_regression" for item in report.diagnostics)
+
     def test_non_finite_metric(self):
         metrics = {"loss": float("nan"), "accuracy": 0.9}
         report = diagnose_metrics(metrics)
