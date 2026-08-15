@@ -52,6 +52,23 @@ Reports include per-class precision, recall, F1, specificity, support,
 normalized matrices, top error pairs, and optional parent-group confusion.
 Use `analyze_hierarchical_confusion()` for coarse-to-fine levels.
 
+### Supervised-learning readiness
+
+Use the registry to assess architecture-specific dataset requirements before
+training:
+
+```python
+from silver_diagnostics import assess_supervised_system
+
+assessment = assess_supervised_system("transformer", "classification", {
+    "labels": True, "finite_features": True,
+    "train_validation_test": True, "sequence_order": True,
+    "scaled_numeric": True,
+})
+if not assessment.valid:
+    raise ValueError(assessment.blockers)
+```
+
 ## Features
 
 - **Dataset Validation**: Comprehensive checks for empty data, length mismatches, and structural issues
