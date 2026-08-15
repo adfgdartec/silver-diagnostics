@@ -30,6 +30,14 @@ class TestDiagnosticReport:
         report = DiagnosticReport(valid=False, diagnostics=diagnostics)
         assert report.valid == False
         assert len(report.diagnostics) == 1
+        assert len(report.errors) == 1
+        assert report.summary() == {"error": 1, "warning": 0, "info": 0}
+        with pytest.raises(ValueError, match="Test"):
+            report.raise_if_invalid()
+
+    def test_report_serializes(self):
+        report = diagnose_metrics({"loss": 0.5})
+        assert report.to_dict() == {"valid": True, "diagnostics": []}
 
 
 class TestDiagnoseDataset:
