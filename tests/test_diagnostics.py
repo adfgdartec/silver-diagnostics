@@ -1,5 +1,4 @@
 import pytest
-import math
 from silver_diagnostics import (
     Diagnostic,
     DiagnosticReport,
@@ -29,7 +28,7 @@ class TestDiagnosticReport:
             Diagnostic(code="test", severity="error", message="Test", details={})
         ]
         report = DiagnosticReport(valid=False, diagnostics=diagnostics)
-        assert report.valid == False
+        assert not report.valid
         assert len(report.diagnostics) == 1
         assert len(report.errors) == 1
         assert report.summary() == {"error": 1, "warning": 0, "info": 0}
@@ -47,7 +46,7 @@ class TestDiagnoseDataset:
         labels = []
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "empty_dataset" for d in report.diagnostics)
 
     def test_length_mismatch(self):
@@ -55,7 +54,7 @@ class TestDiagnoseDataset:
         labels = [0.0]  # Only one label
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "length_mismatch" for d in report.diagnostics)
 
     def test_feature_width_mismatch(self):
@@ -63,7 +62,7 @@ class TestDiagnoseDataset:
         labels = [0.0, 1.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "feature_width_mismatch" for d in report.diagnostics)
 
     def test_non_finite_feature(self):
@@ -71,7 +70,7 @@ class TestDiagnoseDataset:
         labels = [0.0, 1.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_feature" for d in report.diagnostics)
 
     def test_infinite_feature(self):
@@ -79,7 +78,7 @@ class TestDiagnoseDataset:
         labels = [0.0, 1.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_feature" for d in report.diagnostics)
 
     def test_non_finite_label(self):
@@ -87,7 +86,7 @@ class TestDiagnoseDataset:
         labels = [0.0, float("nan")]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_label" for d in report.diagnostics)
 
     def test_string_feature(self):
@@ -95,7 +94,7 @@ class TestDiagnoseDataset:
         labels = [0.0, 1.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_feature" for d in report.diagnostics)
 
     def test_valid_dataset(self):
@@ -103,7 +102,7 @@ class TestDiagnoseDataset:
         labels = [0.0, 1.0, 0.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == True
+        assert report.valid
         assert len(report.diagnostics) == 0
 
     def test_single_feature_vector(self):
@@ -111,7 +110,7 @@ class TestDiagnoseDataset:
         labels = [0.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == True
+        assert report.valid
 
     def test_consistent_feature_width(self):
         features = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
@@ -133,21 +132,21 @@ class TestDiagnoseMetrics:
         metrics = {"loss": float("nan"), "accuracy": 0.9}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_metric" for d in report.diagnostics)
 
     def test_infinite_metric(self):
         metrics = {"loss": float("inf"), "accuracy": 0.9}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_metric" for d in report.diagnostics)
 
     def test_string_metric(self):
         metrics = {"loss": "invalid", "accuracy": 0.9}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_metric" for d in report.diagnostics)
 
     def test_exploding_gradient_warning(self):
@@ -155,7 +154,7 @@ class TestDiagnoseMetrics:
         report = diagnose_metrics(metrics)
 
         # Should have warning but still be valid (no errors)
-        assert report.valid == True
+        assert report.valid
         assert any(d.code == "exploding_gradient" for d in report.diagnostics)
         gradient_warnings = [
             d for d in report.diagnostics if d.code == "exploding_gradient"
@@ -179,26 +178,26 @@ class TestDiagnoseMetrics:
         metrics = {"loss": 0.5, "accuracy": 0.9, "f1": 0.85}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == True
+        assert report.valid
         assert len(report.diagnostics) == 0
 
     def test_negative_metrics_valid(self):
         metrics = {"loss": -0.5, "gradient": -100.0}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == True
+        assert report.valid
 
     def test_zero_metrics_valid(self):
         metrics = {"loss": 0.0, "accuracy": 0.0}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == True
+        assert report.valid
 
     def test_multiple_metrics_multiple_errors(self):
         metrics = {"loss": float("nan"), "accuracy": float("inf"), "gradient_norm": 1e6}
         report = diagnose_metrics(metrics)
 
-        assert report.valid == False
+        assert not report.valid
         error_count = sum(1 for d in report.diagnostics if d.severity == "error")
         assert error_count == 2
 
@@ -267,7 +266,7 @@ class TestEdgeCases:
         report = diagnose_dataset(features, labels)
 
         # Very large numbers are still finite
-        assert report.valid == True
+        assert report.valid
 
     def test_very_small_numbers(self):
         features = [[1e-308, 2e-308]]
@@ -275,14 +274,14 @@ class TestEdgeCases:
         report = diagnose_dataset(features, labels)
 
         # Very small numbers are still finite
-        assert report.valid == True
+        assert report.valid
 
     def test_negative_infinity(self):
         features = [[1.0, float("-inf")]]
         labels = [0.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == False
+        assert not report.valid
         assert any(d.code == "non_finite_feature" for d in report.diagnostics)
 
     def test_zero_denominator_like_scenario(self):
@@ -291,4 +290,4 @@ class TestEdgeCases:
         labels = [0.0, 1.0]
         report = diagnose_dataset(features, labels)
 
-        assert report.valid == True
+        assert report.valid

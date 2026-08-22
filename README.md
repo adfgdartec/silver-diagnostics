@@ -1,8 +1,12 @@
 # silver-diagnostics
 
+<p align="center"><img src="https://raw.githubusercontent.com/adfgdartec/silver-diagnostics/main/docs/assets/silver-hero.png" alt="Silver actionable ML diagnostics" width="100%"></p>
+
+**Turn training telemetry into a health score and a ranked next-action list.**
+
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](tests/)
+[![CI](https://github.com/adfgdartec/silver-diagnostics/actions/workflows/ci.yml/badge.svg)](https://github.com/adfgdartec/silver-diagnostics/actions/workflows/ci.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-blue.svg)](https://flake8.pycqa.org/)
 
 Framework-neutral ML data and training diagnostics for Silver. A Python package designed for ML researchers who need robust data validation and training stability checks across different frameworks.
@@ -14,6 +18,28 @@ pip install silver-diagnostics
 ```
 
 ## Quick Start
+
+### Training health, not just warnings
+
+```python
+from silver_diagnostics import diagnose_training_health
+
+health = diagnose_training_health([
+    {"loss": 1.0, "val_loss": 1.1},
+    {"loss": 0.6, "val_loss": 0.7},
+    {"loss": 0.4, "val_loss": 0.9},
+])
+
+print(health.status, health.score, health.best_step)
+for action in health.recommendations:
+    print(action.priority, action.title, action.action)
+
+open("training-health.md", "w").write(health.to_markdown())
+```
+
+The 1.0 health engine detects missing/non-finite metrics, exploding gradients,
+plateaus, true divergence, regression, and probable overfitting. Reports are
+machine-readable, Markdown-ready, and framework-neutral.
 
 ```python
 from silver_diagnostics import diagnose_dataset, diagnose_metrics
