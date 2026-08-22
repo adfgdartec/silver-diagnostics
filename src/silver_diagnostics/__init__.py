@@ -7,7 +7,7 @@ from .classification import (
 )
 from .metrics import diagnose_metric_history, diagnose_metrics
 from .models import Diagnostic, DiagnosticReport
-from .model import diagnose_model_spec
+from .model import diagnose_model_spec as diagnose_model_spec
 from .supervised import assess_supervised_system, AlgorithmFamily, DatasetRequirement, LearningPrinciple, SupervisedAssessment
 
 __all__ = ["Diagnostic", "DiagnosticReport", "diagnose_dataset", "diagnose_metrics", "diagnose_metric_history",
@@ -16,4 +16,4 @@ __all__ = ["Diagnostic", "DiagnosticReport", "diagnose_dataset", "diagnose_metri
 __all__.append("diagnose_model_spec")
 __all__ += ["LearningPrinciple", "DatasetRequirement", "AlgorithmFamily", "SupervisedAssessment", "assess_supervised_system"]
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"

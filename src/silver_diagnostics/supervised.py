@@ -1,7 +1,7 @@
 """Extensible catalog and assessment engine for supervised learning systems."""
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, Iterable, Mapping, Tuple
+from dataclasses import dataclass
+from typing import Any, Dict, Mapping, Tuple
 
 
 @dataclass(frozen=True)

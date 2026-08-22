@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "silver-diagnostics"
-version = "0.3.0"
+version = "0.4.0"
 description = "Framework-neutral ML data and training diagnostics for Silver."
 readme = "README.md"
 requires-python = ">=3.8"

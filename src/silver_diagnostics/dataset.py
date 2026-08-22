@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 
 from .models import Diagnostic, DiagnosticReport
 from .utils import is_finite
