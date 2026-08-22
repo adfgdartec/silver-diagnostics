@@ -289,7 +289,7 @@ for name, result in validation_results.items():
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.10+
 
 ## Development
 
