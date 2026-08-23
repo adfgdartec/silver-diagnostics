@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2 - 2026-08-23
+
+- Keep the compatibility test focused on the public severity contract while exact-zero gradients remain visible in decision-plan evidence.
+
 ## 1.2.1 - 2026-08-23
 
 - Preserve the established layer-health severity for exact-zero gradients while decision plans continue to surface them as vanishing-gradient evidence.
