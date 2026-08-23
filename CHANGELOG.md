@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 - 2026-08-23
+
+- Coordinated ecosystem release for validated, decision-ready experiment artifacts.
+
 ## 1.2.2 - 2026-08-23
 
 - Keep the compatibility test focused on the public severity contract while exact-zero gradients remain visible in decision-plan evidence.
