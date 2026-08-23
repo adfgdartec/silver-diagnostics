@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-22
+
+### Added
+- Added visual training-health reports with real loss curves, validation curves,
+  scored findings, and per-layer gradient signals.
+- Added `diagnose_layer_health()` for collapsed activations, dead activations,
+  and vanishing or exploding gradients.
+
 ## [1.0.0] - 2026-08-22
 
 ### Added

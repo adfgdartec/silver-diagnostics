@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "silver-diagnostics"
-version = "1.0.0"
-description = "Framework-neutral ML data and training diagnostics for Silver."
+version = "1.1.0"
+description = "Visual, framework-neutral neural-network and training diagnostics for Silver."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 authors = [{name = "Silver Contributors"}]
-keywords = ["machine-learning", "diagnostics", "debugging", "data-quality", "python"]
+keywords = ["machine-learning", "diagnostics", "neural-networks", "visualization", "debugging", "python"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",

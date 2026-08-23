@@ -90,6 +90,12 @@ class TrainingHealthReport:
             )
         return "\n".join(lines).rstrip() + "\n"
 
+    def to_svg(self, history: Sequence[Mapping[str, float]]) -> str:
+        """Render this diagnosis with the metric history that produced it."""
+        from .visualization import training_health_svg
+
+        return training_health_svg(self, history)
+
     def raise_if_critical(self) -> "TrainingHealthReport":
         if self.status == "critical":
             raise RuntimeError("training health is critical: %s" % ", ".join(

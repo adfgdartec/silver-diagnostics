@@ -4,12 +4,30 @@
 
 **Turn training telemetry into a health score and a ranked next-action list.**
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
 [![CI](https://github.com/adfgdartec/silver-diagnostics/actions/workflows/ci.yml/badge.svg)](https://github.com/adfgdartec/silver-diagnostics/actions/workflows/ci.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-blue.svg)](https://flake8.pycqa.org/)
 
 Framework-neutral ML data and training diagnostics for Silver. A Python package designed for ML researchers who need robust data validation and training stability checks across different frameworks.
+
+## Visual neural health
+
+<p align="center"><img src="https://raw.githubusercontent.com/adfgdartec/silver-diagnostics/main/docs/assets/neural-network-inspection.png" alt="Neural-network inputs, hidden layers, activations, gradients, prediction, and training health" width="100%"></p>
+
+```python
+from silver_diagnostics import diagnose_layer_health, diagnose_training_health
+
+training = diagnose_training_health(history)
+open("training-health.svg", "w", encoding="utf-8").write(training.to_svg(history))
+
+layers = diagnose_layer_health(model_inspection.to_dict()["layers"])
+open("layer-health.svg", "w", encoding="utf-8").write(layers.to_svg())
+```
+
+Real curves expose convergence and overfitting; measured activation sparsity,
+variance, and gradient RMS expose unhealthy layers. See the
+[signal definitions and limits](docs/neural-visual-inspection.md).
 
 ## Installation
 
@@ -37,7 +55,7 @@ for action in health.recommendations:
 open("training-health.md", "w").write(health.to_markdown())
 ```
 
-The 1.0 health engine detects missing/non-finite metrics, exploding gradients,
+The health engine detects missing/non-finite metrics, exploding gradients,
 plateaus, true divergence, regression, and probable overfitting. Reports are
 machine-readable, Markdown-ready, and framework-neutral.
 
