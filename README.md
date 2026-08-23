@@ -339,3 +339,11 @@ Apache-2.0 - see [LICENSE](LICENSE) file for details.
 - [silver-data](https://github.com/adfgdartec/silver-data) - Dataset handling
 - [silver-run](https://github.com/adfgdartec/silver-run) - Training lifecycle
 - [silver-adapters](https://github.com/adfgdartec/silver-adapters) - Framework adapters
+
+## From visuals to fixes
+
+`build_debug_plan(...)` combines training health, layer signals, input
+profiles, and topology into a deterministic decision plan. Each ranked step
+contains its evidence, a concrete action, the expected effect, and a
+verification test; `DecisionPlan.to_svg()` makes the full reasoning reviewable
+in code review or experiment artifacts.

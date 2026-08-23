@@ -31,6 +31,7 @@ def test_layer_health_diagnoses_dead_and_exploding_layers_visually():
     ])
     assert report.status == "critical"
     assert report.layers[1].status == "warning"
+    assert "vanishing gradient" in report.layers[1].findings
     assert "exploding gradient" in report.layers[2].findings
     assert report.to_dict()["schema"] == "silver.diagnostics/layer-health-1"
     svg = report.to_svg()

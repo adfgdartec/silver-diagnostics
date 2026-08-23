@@ -18,3 +18,21 @@ open("layer-health.svg", "w", encoding="utf-8").write(layers.to_svg())
 Every finding is threshold-based and machine-readable. Missing signals remain
 unknown rather than being inferred. Layer reports use schema
 `silver.diagnostics/layer-health-1`.
+
+## From evidence to a decision
+
+```python
+from silver_diagnostics import build_debug_plan
+
+plan = build_debug_plan(
+    training=training.to_dict(),
+    layers=model_inspection.to_dict()["layers"],
+    neural_inputs=input_profile.to_dict(),
+    topology=network.to_dict(),
+)
+open("decision-guide.svg", "w", encoding="utf-8").write(plan.to_svg())
+```
+
+Each decision includes observed evidence, a bounded intervention, the expected
+effect, and a verification test. The planner proposes changes; it never silently
+mutates the model, dataset, or optimizer.

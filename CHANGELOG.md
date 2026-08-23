@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 - 2026-08-23
+
+- Added deterministic decision plans that rank data, architecture, optimization, and generalization fixes with verification steps.
+- Added detailed decision-guide SVG output and zero-gradient vanishing-gradient detection.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

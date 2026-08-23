@@ -96,6 +96,21 @@ class TrainingHealthReport:
 
         return training_health_svg(self, history)
 
+    def to_decision_plan(
+        self,
+        *,
+        layers: Sequence[Mapping[str, Any]] = (),
+        neural_inputs: Optional[Mapping[str, Any]] = None,
+        topology: Optional[Mapping[str, Any]] = None,
+    ) -> Any:
+        """Combine this training diagnosis with model and data evidence."""
+        from .decision import build_debug_plan
+
+        return build_debug_plan(
+            training=self.to_dict(), layers=layers,
+            neural_inputs=neural_inputs, topology=topology,
+        )
+
     def raise_if_critical(self) -> "TrainingHealthReport":
         if self.status == "critical":
             raise RuntimeError("training health is critical: %s" % ", ".join(
