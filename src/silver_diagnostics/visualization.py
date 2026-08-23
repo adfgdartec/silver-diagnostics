@@ -59,7 +59,7 @@ def diagnose_layer_health(
             findings.append("mostly zero activations")
         if activation_std is not None and activation_std <= 1e-10:
             findings.append("collapsed activation variance")
-        if gradient_rms is not None and 0 <= gradient_rms < vanishing_gradient:
+        if gradient_rms is not None and 0 < gradient_rms < vanishing_gradient:
             findings.append("vanishing gradient")
         if gradient_rms is not None and gradient_rms > exploding_gradient:
             findings.append("exploding gradient")

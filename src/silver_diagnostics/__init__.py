@@ -31,4 +31,4 @@ __all__ += [
 ]
 __all__ += ["DecisionPlan", "DecisionStep", "build_debug_plan", "decision_plan_svg"]
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"

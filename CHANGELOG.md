@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 - 2026-08-23
+
+- Preserve the established layer-health severity for exact-zero gradients while decision plans continue to surface them as vanishing-gradient evidence.
+
 ## 1.2.0 - 2026-08-23
 
 - Added deterministic decision plans that rank data, architecture, optimization, and generalization fixes with verification steps.
