@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0 - 2026-08-23
+
+- Added framework-neutral baseline/candidate report comparison with verdicts, metric deltas, and resolved/new decision codes.
+
 ## 1.3.0 - 2026-08-23
 
 - Coordinated ecosystem release for validated, decision-ready experiment artifacts.
