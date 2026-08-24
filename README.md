@@ -5,11 +5,25 @@
 **Turn training telemetry into a health score and a ranked next-action list.**
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://github.com/adfgdartec/silver-diagnostics/blob/main/LICENSE)
 [![CI](https://github.com/adfgdartec/silver-diagnostics/actions/workflows/ci.yml/badge.svg)](https://github.com/adfgdartec/silver-diagnostics/actions/workflows/ci.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-blue.svg)](https://flake8.pycqa.org/)
 
-Framework-neutral ML data and training diagnostics for Silver. A Python package designed for ML researchers who need robust data validation and training stability checks across different frameworks.
+Pure-stdlib ML diagnostics for Silver: no NumPy, pandas, or framework is
+required. Turn training telemetry into a health score, visual evidence, and a
+ranked next-action list.
+
+```python
+from silver_diagnostics import diagnose_training_health
+
+report = diagnose_training_health([
+    {"loss": 1.0, "val_loss": 1.1},
+    {"loss": 0.4, "val_loss": 0.9},
+    {"loss": 0.1, "val_loss": 1.2},
+])
+print(report.status, report.score)
+print(report.recommendations[0])
+```
 
 ## Visual neural health
 
@@ -27,7 +41,7 @@ open("layer-health.svg", "w", encoding="utf-8").write(layers.to_svg())
 
 Real curves expose convergence and overfitting; measured activation sparsity,
 variance, and gradient RMS expose unhealthy layers. See the
-[signal definitions and limits](docs/neural-visual-inspection.md).
+[signal definitions and limits](https://github.com/adfgdartec/silver-diagnostics/blob/main/docs/neural-visual-inspection.md).
 
 ## Installation
 
@@ -328,11 +342,11 @@ mypy src/
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/adfgdartec/silver-diagnostics/blob/main/CONTRIBUTING.md) for guidelines.
 
 ## License
 
-Apache-2.0 - see [LICENSE](LICENSE) file for details.
+Apache-2.0 - see [LICENSE](https://github.com/adfgdartec/silver-diagnostics/blob/main/LICENSE) file for details.
 
 ## Related Packages
 

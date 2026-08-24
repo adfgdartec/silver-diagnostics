@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0 - 2026-08-24
+
+- Packaging/trust cleanup: PyPI-safe links, Beta metadata, lean sdists, pure-stdlib positioning, and contributor policy.
+
 ## 1.4.0 - 2026-08-23
 
 - Added framework-neutral baseline/candidate report comparison with verdicts, metric deltas, and resolved/new decision codes.
