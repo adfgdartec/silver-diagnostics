@@ -33,4 +33,4 @@ __all__ += [
 __all__ += ["DecisionPlan", "DecisionStep", "build_debug_plan", "decision_plan_svg"]
 __all__ += ["ReportComparison", "compare_reports"]
 
-__version__ = "1.5.0"
+__version__ = "1.5.1"
